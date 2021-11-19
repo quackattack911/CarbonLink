@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorServer/CarbonLinkBlazorServer.csproj",
-      "projectName": "CarbonLinkBlazorServer",
-      "projectPath": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorServer/CarbonLinkBlazorServer.csproj",
+      "projectUniqueName": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorApp/CarbonLinkBlazorApp.csproj",
+      "projectName": "CarbonLinkBlazorApp",
+      "projectPath": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorApp/CarbonLinkBlazorApp.csproj",
       "packagesPath": "/home/tuan/.nuget/packages/",
-      "outputPath": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorServer/obj/",
+      "outputPath": "/home/tuan/Documents/Projects/CarbonLink/CarbonLinkBlazorApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/tuan/.nuget/NuGet/NuGet.Config"

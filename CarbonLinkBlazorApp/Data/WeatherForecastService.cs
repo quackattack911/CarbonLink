@@ -1,4 +1,4 @@
-namespace CarbonLinkBlazorServer.Data;
+namespace CarbonLinkBlazorApp.Data;
 
 public class WeatherForecastService
 {
