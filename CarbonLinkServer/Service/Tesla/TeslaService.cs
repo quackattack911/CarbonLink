@@ -1,24 +1,20 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Http;
-using System;
-
 namespace CarbonLinkServer.Service.Tesla;
 
 public class TeslaService
 {
-    private readonly IConfiguration Configuration;
+    private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _accessToken;
 
     public TeslaService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
-        Configuration = configuration;
+        _configuration = configuration;
         _httpClientFactory = httpClientFactory;
+        _accessToken = _configuration["Tesla:AccessToken"];
     }
 
-    var accessToken = Configuration["Tesla:AccessToken"];
-
-    // public async Task<ChargeStateDto> GetChargeState()
-    // {
-        
-    // }
+    public async Task<ChargeStateDto> GetChargeState()
+    {
+        var httpClient = _httpClientFactory.CreateClient("Tesla");
+    }
 }

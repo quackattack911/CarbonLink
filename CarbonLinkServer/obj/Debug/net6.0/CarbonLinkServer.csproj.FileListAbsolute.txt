@@ -13,7 +13,6 @@ C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Micr
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.csproj.AssemblyReference.cache
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.AssemblyInfoInputs.cache
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.AssemblyInfo.cs
@@ -28,3 +27,7 @@ C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\Carb
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\ref\CarbonLinkServer.dll
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.pdb
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.genruntimeconfig.cache
+C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\System.Net.Http.Extensions.dll
+C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\System.Net.Http.Primitives.dll
+C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.csproj.AssemblyReference.cache
