@@ -30,3 +30,4 @@ C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\Carb
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\System.Net.Http.Extensions.dll
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\System.Net.Http.Primitives.dll
 C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Navi\Documents\GitHub\CarbonLink\CarbonLinkServer\obj\Debug\net6.0\CarbonLinkServer.csproj.AssemblyReference.cache
