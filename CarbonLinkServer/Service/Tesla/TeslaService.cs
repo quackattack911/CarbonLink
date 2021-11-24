@@ -18,30 +18,54 @@ public class TeslaService
         _id = _configuration["Tesla:Id"];
     }
 
-    public async Task<ChargeStateDto> GetChargeState()
+    public async Task<ChargeStateDto?> GetChargeState()
     {
+        
         try
         {
             string chargeRoute = $"api/1/vehicles/{_id}/data_request/charge_state";
             var httpClient = _httpClientFactory.CreateClient("Tesla");
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            var httpResponseMessage = await httpClient.PostAsync(chargeRoute, null);
-            if (httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content != null)
+            var httpResponseMessage = await httpClient.GetAsync(chargeRoute);
+
+            if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
             {
-                string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                var settings = new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore
-                };
-                return JsonConvert.DeserializeObject<ChargeStateDto>(responseContent, settings);
+                throw new Exception("Get Charge State Failed!");
             }
-            throw new Exception("Get Charge State Failed!");
+
+            string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
+            ChargeStateDto chargeState = JsonConvert.DeserializeObject<ChargeStateDto>(responseContent, settings);
+            return chargeState;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Console.WriteLine(ex.Message);
+            return null;
         }
-        
+    }
+
+    public async Task WakeVehicle()
+    {
+        try
+        {
+            string wakeRoute = $"api/1/vehicles/{_id}/wake_up";
+            var httpClient = _httpClientFactory.CreateClient("Tesla");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            var httpResponseMessage = await httpClient.PostAsync(wakeRoute, null);
+            if (httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content != null)
+            {
+                return;
+            }
+            throw new Exception("Wake Up Failed!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }
