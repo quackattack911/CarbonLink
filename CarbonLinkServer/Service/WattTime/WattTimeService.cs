@@ -1,4 +1,3 @@
-
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 
@@ -17,6 +16,28 @@ public class WattTimeService
         _httpClientFactory = httpClientFactory;
         _username = _configuration["WattTime:Username"];
         _password = _configuration["WattTime:Password"];
+    }
+
+    private async Task<AccessTokenDto> Login()
+    {
+        string loginRoute = "login";
+        var httpClient = _httpClientFactory.CreateClient("WattTime");
+        var authenticationString = $"{_username}:{_password}";
+        var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
+        httpClient.DefaultRequestHeaders.Add("Authorization", "Basic" + base64EncodedAuthenticationString);
+        var httpResponseMessage = await httpClient.GetAsync(loginRoute);
+        if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
+        {
+            throw new Exception("Watt Time Login Failed!");
+        }
+        string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+        var settings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore
+        };
+        AccessTokenDto accessToken = JsonConvert.DeserializeObject<AccessTokenDto>(responseContent, settings);
+        return accessToken;
     }
 
     public async Task<RealTimeEmissionsIndexDto> GetRealTimeEmissions()
@@ -40,25 +61,5 @@ public class WattTimeService
         };
         RealTimeEmissionsIndexDto realTimeEmissionsIndexDto = JsonConvert.DeserializeObject<RealTimeEmissionsIndexDto>(responseContent, settings);
         return realTimeEmissionsIndexDto;
-    }
-
-    private async Task<AccessTokenDto> Login()
-    {
-        string loginRoute = "login";
-        var httpClient = _httpClientFactory.CreateClient("WattTime");
-        //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-        var httpResponseMessage = await httpClient.GetAsync(loginRoute);
-        if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
-        {
-            throw new Exception("Watt Time Login Failed!");
-        }
-        string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        var settings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore
-        };
-        AccessTokenDto accessToken = JsonConvert.DeserializeObject<AccessTokenDto>(responseContent, settings);
-        return accessToken;
     }
 }
