@@ -11,6 +11,7 @@ public class WattTimeService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _username;
     private readonly string _password;
+    HttpClient _httpClient;
 
     public WattTimeService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
@@ -18,16 +19,17 @@ public class WattTimeService
         _httpClientFactory = httpClientFactory;
         _username = _configuration["WattTime:Username"];
         _password = _configuration["WattTime:Password"];
+        _httpClient = _httpClientFactory.CreateClient("WattTime");
     }
 
     private async Task<AccessTokenDto> Login()
     {
         string loginRoute = "login";
-        var httpClient = _httpClientFactory.CreateClient("WattTime");
         var authenticationString = $"{_username}:{_password}";
         var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
-        httpClient.DefaultRequestHeaders.Add("Authorization", "Basic" + base64EncodedAuthenticationString);
-        var httpResponseMessage = await httpClient.GetAsync(loginRoute);
+        var request = new HttpRequestMessage(HttpMethod.Get, loginRoute);
+        request.Headers.Add("Authorization", "Basic" + base64EncodedAuthenticationString);
+        var httpResponseMessage = await _httpClient.SendAsync(request);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
             throw new Exception("Watt Time Login Failed!");
@@ -46,14 +48,14 @@ public class WattTimeService
     {
         string realTimeEmissionRoute = "index";
         var httpClient = _httpClientFactory.CreateClient("WattTime");
-        var accessToken = await Login();
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
         var uriBuilder = new UriBuilder(realTimeEmissionRoute);
         NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
         query["latitude"] = _configuration["WattTime:Latitude"];
         query["longitude"] = _configuration["WattTime:Longitude"];
         uriBuilder.Query = query.ToString();
         var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
+        var accessToken = await Login();
+        request.Headers.Add("Bearer", accessToken.Token);
         var httpResponseMessage = await httpClient.SendAsync(request);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
