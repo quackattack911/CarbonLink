@@ -1,5 +1,7 @@
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace CarbonLinkServer.Service.WattTime;
 
@@ -46,13 +48,17 @@ public class WattTimeService
         var httpClient = _httpClientFactory.CreateClient("WattTime");
         var accessToken = await Login();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Token);
-        var httpResponseMessage = await httpClient.GetAsync(realTimeEmissionRoute);
-
+        var uriBuilder = new UriBuilder(realTimeEmissionRoute);
+        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["latitude"] = _configuration["WattTime:Latitude"];
+        query["longitude"] = _configuration["WattTime:Longitude"];
+        uriBuilder.Query = query.ToString();
+        var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
+        var httpResponseMessage = await httpClient.SendAsync(request);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
             throw new Exception("Get Real Time Emissions Failed!");
         }
-
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
         var settings = new JsonSerializerSettings
         {
