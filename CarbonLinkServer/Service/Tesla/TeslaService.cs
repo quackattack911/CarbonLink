@@ -30,7 +30,7 @@ public class TeslaService
         return;
     }
 
-    public async Task<ChargeStateDto> GetChargeState()
+    public async Task<ChargeStateDto?> GetChargeState()
     {
         string chargeRoute = $"api/1/vehicles/{_id}/data_request/charge_state";
         HttpClient httpClient = CreateTeslaClient();
@@ -45,11 +45,11 @@ public class TeslaService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        ChargeStateDto chargeState = JsonConvert.DeserializeObject<ChargeStateDto>(responseContent, settings);
+        ChargeStateDto? chargeState = JsonConvert.DeserializeObject<ChargeStateDto>(responseContent, settings);
         return chargeState;
     }
 
-    public async Task<DriveStateDto> GetDriveState()
+    public async Task<DriveStateDto?> GetDriveState()
     {
         string driveRoute = $"api/1/vehicles/{_id}/data_request/drive_state";
         HttpClient httpClient = CreateTeslaClient();
@@ -64,7 +64,7 @@ public class TeslaService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        DriveStateDto driveStateDto = JsonConvert.DeserializeObject<DriveStateDto>(responseContent, settings);
+        DriveStateDto? driveStateDto = JsonConvert.DeserializeObject<DriveStateDto>(responseContent, settings);
         return driveStateDto;
     }
 

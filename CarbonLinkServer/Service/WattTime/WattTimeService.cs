@@ -20,7 +20,7 @@ public class WattTimeService
         _password = _configuration["WattTime:Password"];
     }
 
-    private async Task<AccessTokenDto> Login()
+    private async Task<AccessTokenDto?> Login()
     {
         string loginRoute = "login";
         var authenticationString = $"{_username}:{_password}";
@@ -39,11 +39,11 @@ public class WattTimeService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        AccessTokenDto accessToken = JsonConvert.DeserializeObject<AccessTokenDto>(responseContent, settings);
+        AccessTokenDto? accessToken = JsonConvert.DeserializeObject<AccessTokenDto>(responseContent, settings);
         return accessToken;
     }
 
-    public async Task<RealTimeEmissionsIndexDto> GetRealTimeEmissions()
+    public async Task<RealTimeEmissionsIndexDto?> GetRealTimeEmissions()
     {
         string realTimeEmissionRoute = "index";
         var uriBuilder = new UriBuilder(realTimeEmissionRoute);
@@ -66,7 +66,7 @@ public class WattTimeService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        RealTimeEmissionsIndexDto realTimeEmissionsIndexDto = JsonConvert.DeserializeObject<RealTimeEmissionsIndexDto>(responseContent, settings);
+        RealTimeEmissionsIndexDto? realTimeEmissionsIndexDto = JsonConvert.DeserializeObject<RealTimeEmissionsIndexDto>(responseContent, settings);
         return realTimeEmissionsIndexDto;
     }
 }
