@@ -1,0 +1,4 @@
+CarbonLinkServer/.vs
+CarbonLinkServer/obj
+CarbonLinkServer/bin
+*.log
