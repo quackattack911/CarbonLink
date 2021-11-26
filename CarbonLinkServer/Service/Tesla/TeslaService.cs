@@ -9,7 +9,6 @@ public class TeslaService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _accessToken;
     private readonly string _id;
-    HttpClient _httpClient;
 
     public TeslaService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
     {
@@ -17,14 +16,13 @@ public class TeslaService
         _httpClientFactory = httpClientFactory;
         _accessToken = _configuration["Tesla:AccessToken"];
         _id = _configuration["Tesla:Id"];
-        _httpClient = _httpClientFactory.CreateClient("Tesla");
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
     }
 
     public async Task WakeVehicle()
     {
         string wakeRoute = $"api/1/vehicles/{_id}/wake_up";
-        var httpResponseMessage = await _httpClient.PostAsync(wakeRoute, null);
+        HttpClient httpClient = CreateTeslaClient();
+        HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(wakeRoute, null);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
             throw new Exception("Wake Up Failed!");
@@ -35,13 +33,14 @@ public class TeslaService
     public async Task<ChargeStateDto> GetChargeState()
     {
         string chargeRoute = $"api/1/vehicles/{_id}/data_request/charge_state";
-        var httpResponseMessage = await _httpClient.GetAsync(chargeRoute);
+        HttpClient httpClient = CreateTeslaClient();
+        HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(chargeRoute);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
             throw new Exception("Get Charge State Failed!");
         }
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        var settings = new JsonSerializerSettings
+        JsonSerializerSettings settings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
@@ -53,18 +52,26 @@ public class TeslaService
     public async Task<DriveStateDto> GetDriveState()
     {
         string driveRoute = $"api/1/vehicles/{_id}/data_request/drive_state";
-        var httpResponseMessage = await _httpClient.GetAsync(driveRoute);
+        HttpClient httpClient = CreateTeslaClient();
+        HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(driveRoute);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
             throw new Exception("Get Drive State Failed!");
         }
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        var settings = new JsonSerializerSettings
+        JsonSerializerSettings settings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
         DriveStateDto driveStateDto = JsonConvert.DeserializeObject<DriveStateDto>(responseContent, settings);
         return driveStateDto;
+    }
+
+    private HttpClient CreateTeslaClient()
+    {
+        HttpClient httpClient = _httpClientFactory.CreateClient("Tesla");
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+        return httpClient;
     }
 }
