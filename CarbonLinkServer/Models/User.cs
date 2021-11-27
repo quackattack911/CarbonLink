@@ -7,6 +7,8 @@ namespace CarbonLinkServer.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
         public string WalletAddress { get; set; }
 
         public bool ChargingInProgress { get; set; }
