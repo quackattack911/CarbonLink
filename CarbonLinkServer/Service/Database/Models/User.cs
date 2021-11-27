@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CarbonLinkServer.Models
+namespace CarbonLinkServer.Service.Database.Models
 {
     public class User
     {
