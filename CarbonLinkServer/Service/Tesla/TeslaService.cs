@@ -5,23 +5,17 @@ namespace CarbonLinkServer.Service.Tesla;
 
 public class TeslaService
 {
-    private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly string _accessToken;
-    private readonly string _id;
 
-    public TeslaService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+    public TeslaService(IHttpClientFactory httpClientFactory)
     {
-        _configuration = configuration;
         _httpClientFactory = httpClientFactory;
-        _accessToken = _configuration["Tesla:AccessToken"];
-        _id = _configuration["Tesla:Id"];
     }
 
-    public async Task WakeVehicle()
+    public async Task WakeVehicle(string accessToken, string id)
     {
-        string wakeRoute = $"api/1/vehicles/{_id}/wake_up";
-        HttpClient httpClient = CreateTeslaClient();
+        string wakeRoute = $"api/1/vehicles/{id}/wake_up";
+        HttpClient httpClient = CreateTeslaClient(accessToken);
         HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(wakeRoute, null);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
@@ -30,10 +24,10 @@ public class TeslaService
         return;
     }
 
-    public async Task<ChargeStateDto?> GetChargeState()
+    public async Task<ChargeStateDto?> GetChargeState(string accessToken, string id)
     {
-        string chargeRoute = $"api/1/vehicles/{_id}/data_request/charge_state";
-        HttpClient httpClient = CreateTeslaClient();
+        string chargeRoute = $"api/1/vehicles/{id}/data_request/charge_state";
+        HttpClient httpClient = CreateTeslaClient(accessToken);
         HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(chargeRoute);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
@@ -49,10 +43,10 @@ public class TeslaService
         return chargeState;
     }
 
-    public async Task<DriveStateDto?> GetDriveState()
+    public async Task<DriveStateDto?> GetDriveState(string accessToken, string id)
     {
-        string driveRoute = $"api/1/vehicles/{_id}/data_request/drive_state";
-        HttpClient httpClient = CreateTeslaClient();
+        string driveRoute = $"api/1/vehicles/{id}/data_request/drive_state";
+        HttpClient httpClient = CreateTeslaClient(accessToken);
         HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(driveRoute);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
         {
@@ -68,10 +62,10 @@ public class TeslaService
         return driveStateDto;
     }
 
-    private HttpClient CreateTeslaClient()
+    private HttpClient CreateTeslaClient(string accessToken)
     {
         HttpClient httpClient = _httpClientFactory.CreateClient("Tesla");
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         return httpClient;
     }
 }

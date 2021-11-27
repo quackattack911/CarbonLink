@@ -43,13 +43,13 @@ public class WattTimeService
         return accessToken;
     }
 
-    public async Task<RealTimeEmissionsIndexDto?> GetRealTimeEmissions()
+    public async Task<RealTimeEmissionsIndexDto?> GetRealTimeEmissions(double latitude, double longitude)
     {
         string realTimeEmissionRoute = "index";
         var uriBuilder = new UriBuilder(realTimeEmissionRoute);
         NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-        query["latitude"] = _configuration["WattTime:Latitude"];
-        query["longitude"] = _configuration["WattTime:Longitude"];
+        query["latitude"] = latitude.ToString();
+        query["longitude"] = longitude.ToString();
         uriBuilder.Query = query.ToString();
         var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
         var accessToken = await Login();
