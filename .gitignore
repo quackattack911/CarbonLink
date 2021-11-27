@@ -4,3 +4,4 @@ CarbonLinkServer/obj
 CarbonLinkServer/bin
 CarbonLinkServer/appsettings.Development.json
 *.log
+node_modules
