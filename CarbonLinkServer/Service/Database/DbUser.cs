@@ -3,8 +3,15 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace CarbonLinkServer.Service.Database
 {
-    public class User
+    public class DbUser
     {
+        public DbUser()
+        {
+            Id = ObjectId.GenerateNewId().ToString();
+            ChargingInProgress = false;
+            Balance = 0;
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

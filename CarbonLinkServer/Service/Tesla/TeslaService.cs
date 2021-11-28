@@ -39,7 +39,7 @@ public class TeslaService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        ChargeStateDto? chargeState = JsonConvert.DeserializeObject<ChargeStateDto>(responseContent, settings);
+        ChargeStateDto? chargeState = JsonConvert.DeserializeObject<ChargeStateResponseDto>(responseContent, settings).Response;
         return chargeState;
     }
 
@@ -58,7 +58,7 @@ public class TeslaService
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
-        DriveStateDto? driveStateDto = JsonConvert.DeserializeObject<DriveStateDto>(responseContent, settings);
+        DriveStateDto? driveStateDto = JsonConvert.DeserializeObject<DriveStateResponseDto>(responseContent, settings).Response;
         return driveStateDto;
     }
 
