@@ -41,4 +41,21 @@ public class CarbonLinkController : ControllerBase
             return BadRequest();
         }
     }
+
+    [HttpPost(Name = "StartCharging")]
+    [Consumes("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult StartCharging([FromBody] Wallet wallet)
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return BadRequest();
+        }
+    }
 }
