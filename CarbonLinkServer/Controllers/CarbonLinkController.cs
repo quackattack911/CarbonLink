@@ -47,6 +47,25 @@ public class CarbonLinkController : ControllerBase
         }
     }
 
+    [HttpPost(Name = "WakeCar")]
+    [Consumes("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> WakeCar([FromBody] Wallet wallet)
+    {
+        try
+        {
+            DbUser user = _databaseService.GetUserFromWallet(wallet.WalletAddress);
+            await _teslaService.WakeVehicle(user.TeslaToken, user.TeslaId);
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return BadRequest();
+        }
+    }
+
     [HttpPost(Name = "StartCharging")]
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
