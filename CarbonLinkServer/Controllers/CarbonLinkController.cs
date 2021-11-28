@@ -29,10 +29,8 @@ public class CarbonLinkController : ControllerBase
             DbUser userToAdd = new DbUser
             {
                 WalletAddress = user.WalletAddress,
-                ChargingInProgress = false,
                 TeslaToken = user.TeslaToken,
                 TeslaId = user.TeslaId,
-                Balance = 0
             };
             _databaseService.Create(userToAdd);
             return StatusCode((int)HttpStatusCode.Created);

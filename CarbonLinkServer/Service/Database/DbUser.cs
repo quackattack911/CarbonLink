@@ -8,6 +8,8 @@ namespace CarbonLinkServer.Service.Database
         public DbUser()
         {
             Id = ObjectId.GenerateNewId();
+            ChargingInProgress = false;
+            Balance = 0;
         }
 
         [BsonId]
@@ -21,9 +23,9 @@ namespace CarbonLinkServer.Service.Database
 
         public string TeslaId { get; set; }
 
-        public double? Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public double? Longitude { get; set; }
+        public double Longitude { get; set; }
 
         public double Balance { get; set; }
     }
