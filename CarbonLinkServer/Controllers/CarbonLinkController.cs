@@ -28,7 +28,6 @@ public class CarbonLinkController : ControllerBase
         {
             DbUser userToAdd = new DbUser
             {
-                Id = Guid.NewGuid().ToString(),
                 WalletAddress = user.WalletAddress,
                 ChargingInProgress = false,
                 TeslaToken = user.TeslaToken,
