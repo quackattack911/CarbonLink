@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace CarbonLinkServer.Service.Database
 {
-    public class User
+    public class DbUser
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -17,9 +17,9 @@ namespace CarbonLinkServer.Service.Database
 
         public string TeslaId { get; set; }
 
-        public double Latitude { get; set; }
+        public double? Latitude { get; set; }
 
-        public double Longitude { get; set; }
+        public double? Longitude { get; set; }
 
         public double Balance { get; set; }
     }

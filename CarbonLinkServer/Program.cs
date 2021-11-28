@@ -6,18 +6,19 @@ using Microsoft.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string userAgent = "CarbonLink/0.0.1";
 builder.Services.AddHttpClient("Tesla", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://owner-api.teslamotors.com/");
     httpClient.DefaultRequestHeaders.Add(
-        HeaderNames.UserAgent, "CarbonLink/0.0.1");
+        HeaderNames.UserAgent, userAgent);
 });
 
 builder.Services.AddHttpClient("WattTime", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://api2.watttime.org/v2/");
     httpClient.DefaultRequestHeaders.Add(
-        HeaderNames.UserAgent, "CarbonLink/0.0.1");
+        HeaderNames.UserAgent, userAgent);
 });
 
 builder.Services.AddSingleton<TeslaService>();

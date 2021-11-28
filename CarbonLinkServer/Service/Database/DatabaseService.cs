@@ -5,26 +5,26 @@ namespace CarbonLinkServer.Service.Database
     public class DatabaseService
     {
         private readonly IConfiguration _configuration;
-        private readonly IMongoCollection<User> _users;
+        private readonly IMongoCollection<DbUser> _users;
 
         public DatabaseService(IConfiguration configuration)
         {
             _configuration = configuration;
             MongoClient mongoClient = new MongoClient(_configuration["MongoDb:ConnectionString"]);
             var database = mongoClient.GetDatabase(_configuration["MongoDb:DatabaseName"]);
-            _users = database.GetCollection<User>(_configuration["MongoDb:CollectionName"]);
+            _users = database.GetCollection<DbUser>(_configuration["MongoDb:CollectionName"]);
         }
 
-        public User Get(string walletAddress) =>
+        public DbUser Get(string walletAddress) =>
             _users.Find(user => user.WalletAddress == walletAddress).FirstOrDefault();
 
-        public User Create(User user)
+        public DbUser Create(DbUser user)
         {
             _users.InsertOne(user);
             return user;
         }
 
-        public void Update(string walletAddress, User userIn) =>
+        public void Update(string walletAddress, DbUser userIn) =>
             _users.ReplaceOne(user => user.WalletAddress == walletAddress, userIn);
 
         public void Remove(string walletAddress) =>
