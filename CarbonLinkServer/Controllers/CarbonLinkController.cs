@@ -1,5 +1,6 @@
 using CarbonLinkServer.Resource;
 using CarbonLinkServer.Service.Database;
+using CarbonLinkServer.Service.Tesla;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -11,11 +12,15 @@ public class CarbonLinkController : ControllerBase
 {
     private readonly ILogger<CarbonLinkController> _logger;
     private readonly DatabaseService _databaseService;
+    private readonly TeslaService _teslaService;
 
-    public CarbonLinkController(ILogger<CarbonLinkController> logger, DatabaseService databaseService)
+    public CarbonLinkController(ILogger<CarbonLinkController> logger,
+        DatabaseService databaseService,
+        TeslaService teslaService)
     {
         _logger = logger;
         _databaseService = databaseService;
+        _teslaService = teslaService;
     }
 
     [HttpPost(Name = "AddUser")]
@@ -32,7 +37,7 @@ public class CarbonLinkController : ControllerBase
                 TeslaToken = user.TeslaToken,
                 TeslaId = user.TeslaId,
             };
-            _databaseService.Create(userToAdd);
+            _databaseService.CreateUser(userToAdd);
             return StatusCode((int)HttpStatusCode.Created);
         }
         catch (Exception ex)
@@ -46,11 +51,16 @@ public class CarbonLinkController : ControllerBase
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult StartCharging([FromBody] Wallet wallet)
+    public async Task<IActionResult> StartChargingAsync([FromBody] Wallet wallet)
     {
         try
         {
-
+            DbUser user = _databaseService.GetUserFromWallet(wallet.WalletAddress);
+            var driveState = await _teslaService.GetDriveState(user.TeslaToken, user.TeslaId);
+            _databaseService.UpdateCoordinates(user.Id, (double)driveState.Latitude, (double)driveState.Longitude);
+            _databaseService.StartCharging(user.Id);
+            Console.WriteLine(driveState.ToString());
+            return StatusCode((int)HttpStatusCode.Created);
         }
         catch (Exception ex)
         {

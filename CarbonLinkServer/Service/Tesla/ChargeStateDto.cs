@@ -2,6 +2,12 @@ using Newtonsoft.Json;
 
 namespace CarbonLinkServer.Service.Tesla;
 
+public class ChargeStateResponseDto
+{
+    [JsonProperty("response")]
+    public ChargeStateDto Response { get; set; }
+}
+
 public class ChargeStateDto
 {
     [JsonProperty("battery_heater_on")]

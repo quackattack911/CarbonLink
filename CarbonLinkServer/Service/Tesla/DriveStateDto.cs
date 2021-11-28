@@ -2,6 +2,12 @@
 
 namespace CarbonLinkServer.Service.Tesla
 {
+    public class DriveStateResponseDto
+    {
+        [JsonProperty("response")]
+        public DriveStateDto Response { get; set; }
+    }
+
     public class DriveStateDto
     {
         [JsonProperty("gps_as_of")]
