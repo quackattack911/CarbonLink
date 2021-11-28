@@ -59,7 +59,25 @@ public class CarbonLinkController : ControllerBase
             var driveState = await _teslaService.GetDriveState(user.TeslaToken, user.TeslaId);
             _databaseService.UpdateCoordinates(user.Id, (double)driveState.Latitude, (double)driveState.Longitude);
             _databaseService.StartCharging(user.Id);
-            Console.WriteLine(driveState.ToString());
+            return StatusCode((int)HttpStatusCode.Created);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return BadRequest();
+        }
+    }
+
+    [HttpPost(Name = "StopCharging")]
+    [Consumes("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> StopChargingAsync([FromBody] Wallet wallet)
+    {
+        try
+        {
+            DbUser user = _databaseService.GetUserFromWallet(wallet.WalletAddress);
+            _databaseService.StopCharging(user.Id);
             return StatusCode((int)HttpStatusCode.Created);
         }
         catch (Exception ex)
