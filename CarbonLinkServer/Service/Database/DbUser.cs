@@ -7,13 +7,14 @@ namespace CarbonLinkServer.Service.Database
     {
         public DbUser()
         {
-            Id = ObjectId.GenerateNewId();
+            Id = ObjectId.GenerateNewId().ToString();
             ChargingInProgress = false;
             Balance = 0;
         }
 
         [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         public string WalletAddress { get; set; }
 

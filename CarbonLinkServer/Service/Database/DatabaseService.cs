@@ -24,10 +24,19 @@ namespace CarbonLinkServer.Service.Database
             return user;
         }
 
-        public void Update(string walletAddress, DbUser userIn) =>
-            _users.ReplaceOne(user => user.WalletAddress == walletAddress, userIn);
+        public void Update(string id, DbUser userIn) =>
+            _users.ReplaceOne(user => user.Id == id, userIn);
 
-        public void Remove(string walletAddress) =>
-            _users.DeleteOne(user => user.WalletAddress == walletAddress);
+        public void Remove(string id) =>
+            _users.DeleteOne(user => user.Id == id);
+
+        public IEnumerable<DbUser> GetChargingUsers() =>
+            _users.Find(user => user.ChargingInProgress).ToEnumerable();
+
+        public void StartCharging(string id) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update.Set("ChargingInProgress", true));
+
+        public void StopCharging(string id) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update.Set("ChargingInProgress", false));
     }
 }
