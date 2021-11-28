@@ -59,7 +59,7 @@ public class CarbonLinkController : ControllerBase
             var driveState = await _teslaService.GetDriveState(user.TeslaToken, user.TeslaId);
             _databaseService.UpdateCoordinates(user.Id, (double)driveState.Latitude, (double)driveState.Longitude);
             _databaseService.StartCharging(user.Id);
-            return StatusCode((int)HttpStatusCode.Created);
+            return StatusCode((int)HttpStatusCode.OK);
         }
         catch (Exception ex)
         {
@@ -78,7 +78,7 @@ public class CarbonLinkController : ControllerBase
         {
             DbUser user = _databaseService.GetUserFromWallet(wallet.WalletAddress);
             _databaseService.StopCharging(user.Id);
-            return StatusCode((int)HttpStatusCode.Created);
+            return StatusCode((int)HttpStatusCode.OK);
         }
         catch (Exception ex)
         {
