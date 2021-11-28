@@ -5,8 +5,8 @@ using System.Net;
 
 namespace CarbonLinkServer.Controllers;
 
+[Route("api/[controller]/[action]")]
 [ApiController]
-[Route("api/[controller]")]
 public class CarbonLinkController : ControllerBase
 {
     private readonly ILogger<CarbonLinkController> _logger;
@@ -22,7 +22,7 @@ public class CarbonLinkController : ControllerBase
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Post([FromBody] User user)
+    public IActionResult AddUser([FromBody] User user)
     {
         try
         {
@@ -40,7 +40,8 @@ public class CarbonLinkController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            _logger.LogError(ex.Message);
+            return BadRequest();
         }
     }
 }
