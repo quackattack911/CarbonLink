@@ -3,5 +3,9 @@ CarbonLinkServer/.vs
 CarbonLinkServer/obj
 CarbonLinkServer/bin
 CarbonLinkServer/appsettings.Development.json
+CarbonLinkCron/.vs
+CarbonLinkCron/obj
+CarbonLinkCron/bin
+CarbonLinkCron/appsettings.Development.json
 *.log
 node_modules
