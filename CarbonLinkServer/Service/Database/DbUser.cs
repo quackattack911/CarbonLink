@@ -29,5 +29,7 @@ namespace CarbonLinkServer.Service.Database
         public double Longitude { get; set; }
 
         public double Balance { get; set; }
+
+        public double ChargeAdded { get; set; }
     }
 }
