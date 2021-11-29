@@ -1,4 +1,5 @@
 using CarbonLinkServer.Resource;
+using CarbonLinkServer.Response;
 using CarbonLinkServer.Service.Database;
 using CarbonLinkServer.Service.Tesla;
 using Microsoft.AspNetCore.Mvc;
@@ -104,6 +105,35 @@ public class CarbonLinkController : ControllerBase
         {
             _logger.LogError(ex.Message);
             return BadRequest();
+        }
+    }
+
+    [HttpGet("{wallet}", Name = "GetTokens")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult GetTokens([FromRoute] string wallet)
+    {
+        try
+        {
+            DbUser user = _databaseService.GetUserFromWallet(wallet);
+            var balance = user.Balance;
+            _databaseService.ResetBalance(user.Id);
+            var jsonResponseObject = new ChainLinkResponse
+            {
+                data = new BalanceInfo { tokensToMint = balance }
+            };
+            var jsonResult = new JsonResult(jsonResponseObject);
+            jsonResult.StatusCode = (int)HttpStatusCode.OK;
+            return jsonResult;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            var jsonResponseObject = new ChainLinkErrorResponse { error = ex.Message };
+            var jsonResult = new JsonResult(jsonResponseObject);
+            jsonResult.StatusCode = (int)HttpStatusCode.BadRequest;
+            return jsonResult;
         }
     }
 }
