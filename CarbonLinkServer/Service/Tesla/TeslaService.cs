@@ -12,6 +12,13 @@ public class TeslaService
         _httpClientFactory = httpClientFactory;
     }
 
+    private HttpClient CreateTeslaClient(string accessToken)
+    {
+        HttpClient httpClient = _httpClientFactory.CreateClient("Tesla");
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        return httpClient;
+    }
+
     public async Task WakeVehicle(string accessToken, string id)
     {
         string wakeRoute = $"api/1/vehicles/{id}/wake_up";
@@ -62,10 +69,36 @@ public class TeslaService
         return driveStateDto;
     }
 
-    private HttpClient CreateTeslaClient(string accessToken)
+    public async Task StartCharging(string accessToken, string id)
     {
-        HttpClient httpClient = _httpClientFactory.CreateClient("Tesla");
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        return httpClient;
+        string startChargeRoute = $"api/1/vehicles/{id}/command/charge_start";
+        HttpClient httpClient = CreateTeslaClient(accessToken);
+        HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(startChargeRoute, null);
+        if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
+        {
+            throw new Exception("Charge Start Failed!");
+        }
+        return;
+    }
+
+    public async Task StopCharging(string accessToken, string id)
+    {
+        string stopChargeRoute = $"api/1/vehicles/{id}/command/charge_stop";
+        HttpClient httpClient = CreateTeslaClient(accessToken);
+        HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(stopChargeRoute, null);
+        if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
+        {
+            throw new Exception("Charge Start Failed!");
+        }
+        return;
+    }
+
+    public async Task ResetChargeState(string accessToken, string id)
+    {
+        await StopCharging(accessToken, id);
+        Thread.Sleep(10000);
+        await StartCharging(accessToken, id);
+        Thread.Sleep(10000);
+        await StopCharging(accessToken, id);
     }
 }
