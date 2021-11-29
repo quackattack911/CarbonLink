@@ -97,6 +97,7 @@ public class CarbonLinkController : ControllerBase
         {
             DbUser user = _databaseService.GetUserFromWallet(wallet.WalletAddress);
             _databaseService.StopCharging(user.Id);
+            await _teslaService.ResetChargeState(user.TeslaToken, user.TeslaId);
             return StatusCode((int)HttpStatusCode.OK);
         }
         catch (Exception ex)

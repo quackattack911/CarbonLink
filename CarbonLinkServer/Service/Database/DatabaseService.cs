@@ -47,6 +47,10 @@ namespace CarbonLinkServer.Service.Database
             _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
                 .Set("ChargeAdded", chargeAdded));
 
+        public void ResetChargeState(string id) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
+                .Set("ChargeAdded", 0));
+
         public void UpdateBalance(string id, double tokensGained) =>
             _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
                 .Inc("Balance", tokensGained));
