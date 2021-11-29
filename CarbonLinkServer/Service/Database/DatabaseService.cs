@@ -42,5 +42,17 @@ namespace CarbonLinkServer.Service.Database
             _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
                 .Set("Latitude", latitude)
                 .Set("Longitude", longitude));
+
+        public void UpdateChargeState(string id, double chargeAdded) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
+                .Set("ChargeAdded", chargeAdded));
+
+        public void UpdateBalance(string id, double tokensGained) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
+                .Inc("Balance", tokensGained));
+
+        public void ResetBalance(string id) =>
+            _users.UpdateOne(user => user.Id == id, Builders<DbUser>.Update
+                .Set("Balance", 0));
     }
 }
