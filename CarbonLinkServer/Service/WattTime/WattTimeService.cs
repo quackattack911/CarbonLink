@@ -25,7 +25,7 @@ public class WattTimeService
         var authenticationString = $"{_username}:{_password}";
         var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
         var request = new HttpRequestMessage(HttpMethod.Get, loginRoute);
-        request.Headers.Add("Authorization", "Basic" + base64EncodedAuthenticationString);
+        request.Headers.Add("Authorization", "Basic " + base64EncodedAuthenticationString);
         var httpClient = _httpClientFactory.CreateClient("WattTime");
         var httpResponseMessage = await httpClient.SendAsync(request);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
@@ -44,7 +44,7 @@ public class WattTimeService
 
     public async Task<RealTimeEmissionsIndexDto?> GetRealTimeEmissions(double latitude, double longitude)
     {
-        string realTimeEmissionRoute = "index";
+        string realTimeEmissionRoute = "https://api2.watttime.org/v2/index";
         var uriBuilder = new UriBuilder(realTimeEmissionRoute);
         NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
         query["latitude"] = latitude.ToString();
@@ -52,7 +52,7 @@ public class WattTimeService
         uriBuilder.Query = query.ToString();
         var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
         var accessToken = await Login();
-        request.Headers.Add("Authorization", "Bearer" + accessToken.Token);
+        request.Headers.Add("Authorization", "Bearer " + accessToken.Token);
         var httpClient = _httpClientFactory.CreateClient("WattTime");
         var httpResponseMessage = await httpClient.SendAsync(request);
         if (!httpResponseMessage.IsSuccessStatusCode && httpResponseMessage.Content == null)
